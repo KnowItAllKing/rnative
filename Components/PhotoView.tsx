@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
-import { Dimensions, SectionList, CameraRoll, Image } from 'react-native';
+import { FlatList, CameraRoll } from 'react-native';
 
-import { Surface as DefaultSurface, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 
 import styled from 'styled-components';
 
-import { FilterAndSort, OneLevel } from '../Util';
+import { PhotoRow } from './Photos/PhotoRow';
+
+import { FilterAndSort } from '../Util';
 
 const PhotoView = () => {
 	const [photos, setPhotos] = useState<PhotosByDate[]>([]);
+
+	// const [rows, setRows] = useState<P>([])
 
 	const loadPhotos = async () => {
 		const fetched = await CameraRoll.getPhotos({
@@ -41,26 +45,21 @@ const PhotoView = () => {
 
 	return (
 		<>
-			<Section
-				sections={photos}
-				keyExtractor={(item, index) => item + index}
-				renderItem={({ item }) => (
-					<Surface>
-						<Img source={{ uri: item }} />
-					</Surface>
+			<FlatPhotos
+				data={photos}
+				renderItem={({ item }: any) => (
+					<>
+						<Txt>{item.section.date}</Txt>
+						<PhotoRow photos={item.data} />
+					</>
 				)}
-				renderSectionHeader={({ section: { section } }) => (
-					<Txt>{section.date}</Txt>
-				)}
-				stickySectionHeadersEnabled={false}
+				keyExtractor={(_, i) => i.toString()}
 			/>
 		</>
 	);
 };
 
-const { width } = Dimensions.get('window');
-
-const Section = styled(SectionList)`
+const FlatPhotos = styled(FlatList)`
 	padding-top: 0;
 	margin-top: 0;
 `;
@@ -69,22 +68,6 @@ const Txt = styled(Text)`
 	font-size: 20px;
 	align-self: center;
 	padding: 10px;
-`;
-
-const Img = styled(Image)`
-	align-self: center;
-	height: ${width - 50}px;
-	width: ${width - 50}px;
-`;
-
-const Surface = styled(DefaultSurface)`
-	padding: 8px;
-	height: ${width - 25}px;
-	width: ${width - 25}px;
-	align-self: center;
-	align-items: center;
-	justify-content: center;
-	elevation: 4;
 `;
 
 type PhotosByDate = { section: { date: string }; data: string[] };

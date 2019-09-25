@@ -13,7 +13,7 @@ const FilterAndSort = (photos: PhotoFromFetch[]): PhotosByDate[] => {
 	const dates = photos.map(x => x.date).sort();
 
 	const sortedPhotos = dates.map(
-		(d, i): PhotosByDate => {
+		(d, id): PhotosByDate => {
 			const { year, month, day } = NiceDate(d);
 			const filtered = photos
 				.filter(({ date }) => NiceDate(date).day === NiceDate(d).day)
