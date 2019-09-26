@@ -1,27 +1,35 @@
 import React from 'react';
 
-import { Dimensions, FlatList, Image } from 'react-native';
+import { Dimensions, FlatList, Image, TouchableHighlight } from 'react-native';
 
 import { Surface as DefaultSurface } from 'react-native-paper';
 
 import styled from 'styled-components';
 
-const PhotoRow = ({ photos }: { photos: string[] }) => {
-	return (
-		<>
-			<List
-				horizontal
-				data={photos.map(uri => ({ uri }))}
-				renderItem={({ item }: any) => (
-					<Surface>
+const PhotoRow = ({
+	photos,
+	changeRoute
+}: {
+	photos: string[];
+	changeRoute: any;
+}) => (
+	<>
+		<List
+			horizontal
+			data={photos.map(uri => ({ uri }))}
+			renderItem={({ item }: any) => (
+				<Surface>
+					<TouchableHighlight
+						onPress={() => changeRoute('PhotoNotes', item.uri)}>
 						<Img source={{ uri: item.uri }} />
-					</Surface>
-				)}
-				keyExtractor={(_, i) => i.toString()}
-			/>
-		</>
-	);
-};
+					</TouchableHighlight>
+				</Surface>
+			)}
+			keyExtractor={(_, i) => i.toString()}
+		/>
+	</>
+);
+
 const { width } = Dimensions.get('window');
 
 const target = width / 4 - 5;

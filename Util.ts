@@ -1,6 +1,12 @@
-import { PhotoFromFetch, PhotosByDate } from './Components/PhotoView';
+import { PhotoFromFetch, PhotosByDate } from './Components/Views/PhotosView';
 
-const NiceDate = (date: number) => {
+type NiceD = {
+	year: number;
+	month: number;
+	day: number;
+};
+
+const NiceDate = (date: number): NiceD => {
 	const d = new Date(date),
 		year = d.getFullYear(),
 		month = d.getMonth() + 1,
@@ -13,8 +19,7 @@ const FilterAndSort = (photos: PhotoFromFetch[]): PhotosByDate[] => {
 	const dates = photos.map(x => x.date).sort();
 
 	const sortedPhotos = dates.map(
-		(d, id): PhotosByDate => {
-			const { year, month, day } = NiceDate(d);
+		(d): PhotosByDate => {
 			const filtered = photos
 				.filter(({ date }) => NiceDate(date).day === NiceDate(d).day)
 				.map(x => x.uri);
@@ -23,7 +28,7 @@ const FilterAndSort = (photos: PhotoFromFetch[]): PhotosByDate[] => {
 
 			return {
 				section: {
-					date: `${year} ${month} ${day}`
+					date: FormatDate(NiceDate(d))
 				},
 				data
 			};
@@ -66,4 +71,25 @@ const OneLevel = (a: {}, b: {}): boolean => {
 	return true;
 };
 
-export { FilterAndSort, OneLevel };
+const MonthMap = {
+	1: 'January',
+	2: 'February',
+	3: 'March',
+	4: 'April',
+	5: 'May',
+	6: 'June',
+	7: 'July',
+	8: 'August',
+	9: 'September',
+	10: 'October',
+	11: 'November',
+	12: 'December'
+};
+
+const FormatDate = ({ year, month, day }: NiceD) => {
+	const niceMonth = MonthMap[month];
+
+	return `${niceMonth} ${day}, ${year}`;
+};
+
+export { FilterAndSort, OneLevel, FormatDate };

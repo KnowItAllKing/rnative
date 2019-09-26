@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-
 import { FlatList, CameraRoll } from 'react-native';
 
 import { Text } from 'react-native-paper';
 
 import styled from 'styled-components';
 
-import { PhotoRow } from './Photos/PhotoRow';
+import { PhotoRow } from '../Photo/Row';
 
-import { FilterAndSort } from '../Util';
+import { FilterAndSort } from '../../Util';
 
-const PhotoView = () => {
+const PhotosView = ({ changeRoute }: any) => {
 	const [photos, setPhotos] = useState<PhotosByDate[]>([]);
 
 	// const [rows, setRows] = useState<P>([])
@@ -50,7 +49,10 @@ const PhotoView = () => {
 				renderItem={({ item }: any) => (
 					<>
 						<Txt>{item.section.date}</Txt>
-						<PhotoRow photos={item.data} />
+						<PhotoRow
+							photos={item.data}
+							changeRoute={changeRoute}
+						/>
 					</>
 				)}
 				keyExtractor={(_, i) => i.toString()}
@@ -74,4 +76,4 @@ type PhotosByDate = { section: { date: string }; data: string[] };
 
 type PhotoFromFetch = { uri: string; date: number };
 
-export { PhotoView, PhotosByDate, PhotoFromFetch };
+export { PhotosView, PhotosByDate, PhotoFromFetch };
