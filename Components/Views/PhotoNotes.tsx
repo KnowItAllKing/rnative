@@ -18,7 +18,7 @@ import {
 
 import styled from 'styled-components';
 
-const { height, width } = Dimensions.get('screen');
+const { width } = Dimensions.get('window');
 
 const PhotoNotes = ({
 	uri,
@@ -28,11 +28,8 @@ const PhotoNotes = ({
 	changeRoute: any;
 }) => {
 	const [notes, setNotes] = useState('');
-
-	const [dimensions, setDimensions] = useState({ height, width });
-
 	const GoBack = async () => {
-		await AsyncStorage.setItem(uri, notes);
+		notes && (await AsyncStorage.setItem(uri, notes));
 		changeRoute('PhotosView');
 	};
 
@@ -42,45 +39,36 @@ const PhotoNotes = ({
 		const fetchNotes = async () => {
 			const fetched = await AsyncStorage.getItem(uri);
 
-			setNotes(fetched || 'Write notes here...');
-		};
-
-		const fetchDimensions = async () => {
-			Image.getSize(
-				uri,
-				(width, height) => setDimensions({ width, height }),
-				e => console.log(e)
-			);
+			setNotes(fetched);
 		};
 
 		fetchNotes();
-		fetchDimensions();
 	}, []);
 
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-			<ScrollView keyoardShouldPersistTaps='handled'>
-				<Button
+			<ScrollView keyboardShouldPersistTaps='handled'>
+				<BackButton
 					icon='arrow-back'
 					mode='contained'
 					onPress={() => GoBack()}>
 					BACK
-				</Button>
-				<Surface h={dimensions.height} w={dimensions.width}>
-					<Img
-						source={{ uri }}
-						h={dimensions.height}
-						w={dimensions.width}
-					/>
-				</Surface>
+				</BackButton>
+				<Image
+					source={{ uri }}
+					style={{
+						alignSelf: 'center',
+						resizeMode: 'contain',
+						height: 400,
+						width: 400
+					}}
+				/>
 				<Surface>
 					<TextInput
-						label='Notes'
+						label='Write notes here...'
 						multiline
 						value={notes}
-						onChangeText={text =>
-							text !== 'Write notes here...' && setNotes(text)
-						}
+						onChangeText={text => setNotes(text)}
 					/>
 				</Surface>
 			</ScrollView>
@@ -91,25 +79,27 @@ const PhotoNotes = ({
 const target = width - 5;
 
 const Img = styled(Image as any)`
+	flex: 1;
 	align-self: center;
-	height: ${props =>
-		props.h > height ? 0.75 * props.h : props.h || height}px;
-	width: ${props => (props.w > width ? 0.75 * props.w : props.w || width)}px;
+	resize-mode: contain;
+	height: ${null};
+	width: ${null};
 `;
 
-const Surface = styled(DefaultSurface as any)`
-	padding: 8px;
-	margin-top: 20px;
-	height: ${props => props.h || height - 10 + 10}px;
-	width: ${props => props.w || width - 10 + 10}px;
+const Surface = styled(DefaultSurface)`
 	align-self: center;
 	align-items: center;
 	justify-content: center;
 	elevation: 4;
+	margin-top: 50px;
 `;
 
 const TextInput = styled(DefaultInput)`
 	width: ${target - 5}px;
+`;
+
+const BackButton = styled(Button)`
+	margin-bottom: 25px;
 `;
 
 export { PhotoNotes };

@@ -1,4 +1,4 @@
-import { PhotoFromFetch, PhotosByDate } from './Components/Views/PhotosView';
+import { PhotoFromFetch, PhotosByDate } from './App';
 
 type NiceD = {
 	year: number;
@@ -16,7 +16,10 @@ const NiceDate = (date: number): NiceD => {
 };
 
 const FilterAndSort = (photos: PhotoFromFetch[]): PhotosByDate[] => {
-	const dates = photos.map(x => x.date).sort();
+	const dates = photos
+		.map(x => x.date)
+		.sort()
+		.reverse();
 
 	const sortedPhotos = dates.map(
 		(d): PhotosByDate => {
