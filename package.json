@@ -19,6 +19,9 @@
     "styled-components": "^4.4.0"
   },
   "devDependencies": {
+    "@hapi/hoek": "^8.3.2",
+    "@hapi/joi": "^16.1.7",
+    "@hapi/topo": "^4.0.1",
     "@types/react": "^16.8.23",
     "@types/react-native": "^0.57.65",
     "@types/styled-components": "^4.1.19",

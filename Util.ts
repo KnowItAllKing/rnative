@@ -95,4 +95,4 @@ const FormatDate = ({ year, month, day }: NiceD) => {
 	return `${niceMonth} ${day}, ${year}`;
 };
 
-export { FilterAndSort, OneLevel, FormatDate };
+export { FilterAndSort, OneLevel, FormatDate, StringArrayIsEqual };

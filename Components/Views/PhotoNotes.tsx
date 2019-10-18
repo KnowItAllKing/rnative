@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import {
-	ScrollView,
-	Dimensions,
-	AsyncStorage,
-	Image,
-	TouchableWithoutFeedback,
-	Keyboard
-} from 'react-native';
+import { ScrollView, Dimensions, AsyncStorage, Image } from 'react-native';
 
 import {
 	Surface as DefaultSurface,
@@ -28,6 +21,7 @@ const PhotoNotes = ({
 	changeRoute: any;
 }) => {
 	const [notes, setNotes] = useState('');
+
 	const GoBack = async () => {
 		notes && (await AsyncStorage.setItem(uri, notes));
 		changeRoute('PhotosView');
@@ -46,14 +40,17 @@ const PhotoNotes = ({
 	}, []);
 
 	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-			<ScrollView keyboardShouldPersistTaps='handled'>
+		<>
+			<ScrollView
+				keyboardShouldPersistTaps='handled'
+				overScrollMode='always'>
 				<BackButton
 					icon='arrow-back'
-					mode='contained'
+					mode='outlined'
 					onPress={() => GoBack()}>
-					BACK
+					{''}
 				</BackButton>
+
 				<Image
 					source={{ uri }}
 					style={{
@@ -72,26 +69,19 @@ const PhotoNotes = ({
 					/>
 				</Surface>
 			</ScrollView>
-		</TouchableWithoutFeedback>
+		</>
 	);
 };
 
 const target = width - 5;
-
-const Img = styled(Image as any)`
-	flex: 1;
-	align-self: center;
-	resize-mode: contain;
-	height: ${null};
-	width: ${null};
-`;
 
 const Surface = styled(DefaultSurface)`
 	align-self: center;
 	align-items: center;
 	justify-content: center;
 	elevation: 4;
-	margin-top: 50px;
+	margin-top: 10px;
+	margin-bottom: 250px;
 `;
 
 const TextInput = styled(DefaultInput)`
@@ -99,7 +89,8 @@ const TextInput = styled(DefaultInput)`
 `;
 
 const BackButton = styled(Button)`
-	margin-bottom: 25px;
+	margin-bottom: 10px;
+	left: 2%;
 `;
 
 export { PhotoNotes };

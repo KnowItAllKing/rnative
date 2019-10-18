@@ -12,7 +12,7 @@ import { PhotosView } from './Components/Views/PhotosView';
 import { PhotoNotes } from './Components/Views/PhotoNotes';
 import { Loading } from './Components/Views/Loading';
 
-import { FilterAndSort } from './Util';
+import { FilterAndSort, StringArrayIsEqual } from './Util';
 
 const App = () => {
 	const [route, setRoute] = useState('PhotosView');
@@ -31,7 +31,7 @@ const App = () => {
 	const loadPhotos = async () => {
 		try {
 			var fetched = await CameraRoll.getPhotos({
-				first: 100,
+				first: 20,
 				assetType: 'Photos'
 			});
 		} catch (e) {
@@ -46,14 +46,14 @@ const App = () => {
 
 		const filtered = FilterAndSort(mapped);
 
-		const filtered2 = filtered.filter(
-			(p, i) =>
-				filtered
-					.map(x => JSON.stringify(x))
-					.findIndex(x => x === JSON.stringify(p)) === i
+		setPhotos(
+			filtered.filter(
+				(p, i) =>
+					filtered.findIndex(
+						x => JSON.stringify(x.data) === JSON.stringify(p.data)
+					) === i
+			)
 		);
-
-		setPhotos(filtered2);
 	};
 
 	useEffect(() => {
