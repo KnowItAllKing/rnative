@@ -23,7 +23,11 @@ const PhotosView = ({
 			renderItem={({ item }: any) => (
 				<ShadedView>
 					<Txt>{item.section.date}</Txt>
-					<CenteredView x={item.data.length >= 4}>
+					<CenteredView
+						style={{
+							alignItems:
+								item.data.length >= 4 ? 'center' : 'flex-start'
+						}}>
 						<PhotoRow
 							photos={item.data}
 							changeRoute={changeRoute}
@@ -49,16 +53,15 @@ const Txt = styled(Text)`
 `;
 
 const CenteredView = styled(View)`
-	flex: 1;
-	${(props: any) => (props.x ? 'align-items: center;' : '')}
-	${(props: any) => (props.x ? 'justify-content: center;' : '')}
+	flex: 0;
+	justify-content: center;
 `;
 
 const ShadedView = styled(View)``;
 
 const Div = styled(Divider)`
-	margin: 10px;
 	height: 1px;
+	margin-top: 10px;
 `;
 
 export { PhotosView };

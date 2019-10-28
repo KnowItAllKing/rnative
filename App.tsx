@@ -31,7 +31,7 @@ const App = () => {
 	const loadPhotos = async () => {
 		try {
 			var fetched = await CameraRoll.getPhotos({
-				first: 20,
+				first: 15,
 				assetType: 'Photos'
 			});
 		} catch (e) {

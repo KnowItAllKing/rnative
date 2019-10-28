@@ -30,7 +30,7 @@ const PhotoRow = ({
 	</>
 );
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get('screen');
 
 const target = width / 4 - 5;
 

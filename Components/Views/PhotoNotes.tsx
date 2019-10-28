@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-import { ScrollView, Dimensions, AsyncStorage, Image } from 'react-native';
+import {
+	ScrollView,
+	Dimensions,
+	AsyncStorage,
+	Image,
+	KeyboardAvoidingView
+} from 'react-native';
 
 import {
 	Surface as DefaultSurface,
@@ -21,6 +27,7 @@ const PhotoNotes = ({
 	changeRoute: any;
 }) => {
 	const [notes, setNotes] = useState('');
+	let scroll: any = null;
 
 	const GoBack = async () => {
 		notes && (await AsyncStorage.setItem(uri, notes));
@@ -43,31 +50,37 @@ const PhotoNotes = ({
 		<>
 			<ScrollView
 				keyboardShouldPersistTaps='handled'
-				overScrollMode='always'>
-				<BackButton
-					icon='arrow-back'
-					mode='outlined'
-					onPress={() => GoBack()}>
-					{''}
-				</BackButton>
+				overScrollMode='always'
+				ref={scrollv => (scroll = scrollv)}>
+				<KeyboardAvoidingView behavior='padding' enabled>
+					<BackButton
+						icon='arrow-back'
+						mode='outlined'
+						onPress={() => GoBack()}>
+						{''}
+					</BackButton>
 
-				<Image
-					source={{ uri }}
-					style={{
-						alignSelf: 'center',
-						resizeMode: 'contain',
-						height: 400,
-						width: 400
-					}}
-				/>
-				<Surface>
-					<TextInput
-						label='Write notes here...'
-						multiline
-						value={notes}
-						onChangeText={text => setNotes(text)}
+					<Image
+						source={{ uri }}
+						style={{
+							alignSelf: 'center',
+							resizeMode: 'contain',
+							height: 400,
+							width: 400
+						}}
 					/>
-				</Surface>
+					<Surface>
+						<TextInput
+							label='Write notes here...'
+							multiline
+							value={notes}
+							onChangeText={text => setNotes(text)}
+							onTouchStart={e =>
+								scroll.scrollTo({ y: 100, animated: true })
+							}
+						/>
+					</Surface>
+				</KeyboardAvoidingView>
 			</ScrollView>
 		</>
 	);
@@ -81,7 +94,7 @@ const Surface = styled(DefaultSurface)`
 	justify-content: center;
 	elevation: 4;
 	margin-top: 10px;
-	margin-bottom: 250px;
+	margin-bottom: 100px;
 `;
 
 const TextInput = styled(DefaultInput)`
